@@ -1,0 +1,23 @@
+{
+  "name": "book-buddy",
+  "version": "1.0.0",
+  "description": "Book Buddy is a friendly website for people who love books. It's a great place to find new books, share your favorites, and meet other book lovers. Whether you read a lot or just like to read occasionally, Book Buddy is the place for you.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "start-server": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mongodb": "^6.2.0",
+    "mongoose": "^7.6.3",
+    "nodemon": "^3.0.1"
+  }
+}
