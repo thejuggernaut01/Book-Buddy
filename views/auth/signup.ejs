@@ -5,16 +5,50 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
 
-    <main>
-      <div class="">
-        <h1 class="text-4xl">Create an account</h1>
+    <main class="w-[75%] mx-auto md:w-[95%] mt-3">
+      <h1 class="text-4xl">Create an account</h1>
+      <p class="text-sm">Required fields have an asterisk: *</p>
+
+      <div class="flex flex-col mt-5 md:flex-row gap-5">
+        <div class="space-y-5 md:flex-1">        
+
+          <form action="" class="space-y-5">
+            <div class="flex flex-col space-y-1">
+              <label for="firstName" class="text-sm font-semibold">Legal first name*</label>
+              <input type="text" name="firstName" id="firstName" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Legal first name" required style="transition: outline 0.7s ease-in-out">
+            </div>
+
+            <div class="flex flex-col space-y-1">
+              <label for="lastName" class="text-sm font-semibold">Legal last name*</label>
+              <input type="text" name="lastName" id="lastName" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Legal last name" required style="transition: outline 0.7s ease-in-out">
+            </div>
+
+            <div class="flex flex-col space-y-1">
+              <label for="email" class="text-sm font-semibold">Email*</label>
+              <input type="email" name="email" id="email" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Enter your email address" required style="transition: outline 0.7s ease-in-out">
+            </div>
+
+            <div class="flex flex-col space-y-1">
+              <label for="password" class="text-sm font-semibold">Password*</label>
+              <input type="text" name="password" id="password" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Minimum 8 characters" required style="transition: outline 0.7s ease-in-out">
+            </div>
+
+            <div class="flex items-center gap-5">
+              <input type="checkbox" name="certified" id="certified" class="cursor-pointer w-4 h-4" required>
+              
+              <p class="text-xs sm:text-base">I certify that I am 18 years of age or older, I agree to the <span class="text-blue-700 cursor-pointer">User Agreement</span>, and I have read the <span class="text-blue-700 cursor-pointer">Privacy Policy.</span></p>
+            </div>
+
+            <button class="border border-[#0052FF] rounded-full w-full h-14 bg-[#0052FF] text-white text-lg font-semibold hover:shadow-2xl hover:-translate-y-[0.1rem]">Create account</button>
+          </form>
+        </div>
         
-        <div>
-          <form action=""></form>
-          <div class="hidden">
-            <h2>Read More, Learn More</h2>
-            <img src="/images/bibliophile.svg" alt="Bibliophile Icon">
+        <div class="hidden md:flex md:flex-col gap-5 items-center md:flex-1">
+          <div>
+            <h2 class="text-5xl">Read More, </h2>
+            <h2 class="text-5xl">Learn More</h2>
           </div>
+          <img src="/images/bibliophile.svg" alt="Bibliophile Icon" class="w-[400px] h-[400px]">
         </div>
       </div>
     </main>
