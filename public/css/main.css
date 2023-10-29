@@ -141,6 +141,7 @@ form {
   background: transparent;
   color: white;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 #side-menu-toggle:focus {
