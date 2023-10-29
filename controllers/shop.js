@@ -11,3 +11,17 @@ exports.getAllBooks = (req, res, next) => {
     pageTitle: "Available Books",
   });
 };
+
+exports.getCart = (req, res, next) => {
+  res.render("shop/cart", {
+    path: "/cart",
+    pageTitle: "Your Order",
+  });
+};
+
+exports.getOrder = (req, res, next) => {
+  res.render("shop/order", {
+    path: "/orders",
+    pageTitle: "Confirm your order",
+  });
+};
