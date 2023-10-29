@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 
 const shopRoute = require("./routes/shop");
 const authRoute = require("./routes/auth");
+const userRoute = require("./routes/user");
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.set("views", "views");
 
 app.use(shopRoute);
 app.use(authRoute);
+app.use("/user", userRoute);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
