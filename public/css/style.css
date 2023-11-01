@@ -957,6 +957,15 @@ video {
   .lg\:flex {
     display: flex;
   }
+
+  .lg\:w-\[85\%\] {
+    width: 85%;
+  }
+
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
 }
 @media (min-width: 1280px) {
 
