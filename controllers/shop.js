@@ -18,10 +18,3 @@ exports.getCart = (req, res, next) => {
     pageTitle: "Your Order",
   });
 };
-
-exports.getOrder = (req, res, next) => {
-  res.render("shop/order", {
-    path: "/orders",
-    pageTitle: "Confirm your order",
-  });
-};
