@@ -12,8 +12,8 @@ exports.getAllBooks = (req, res, next) => {
   });
 };
 
-exports.getCart = (req, res, next) => {
-  res.render("shop/cart", {
+exports.getFavorite = (req, res, next) => {
+  res.render("shop/favorite", {
     path: "/cart",
     pageTitle: "Your Order",
   });

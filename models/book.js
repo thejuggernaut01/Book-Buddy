@@ -8,7 +8,7 @@ class Book {
     publicationDate,
     rating,
     image,
-    printLength,
+    pages,
     language,
     readingAge,
     isbn13
@@ -19,7 +19,7 @@ class Book {
     this.publicationDate = publicationDate;
     this.rating = rating;
     this.image = image;
-    this.printLength = printLength;
+    this.pages = pages;
     this.language = language;
     this.readingAge = readingAge;
     this.isbn13 = isbn13;
