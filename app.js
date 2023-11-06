@@ -14,13 +14,12 @@ require("dotenv").config();
 app.set("view engine", "ejs");
 app.set("views", "views");
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "/public")));
+
+app.use("/user", userRoute);
 app.use(shopRoute);
 app.use(authRoute);
-app.use("/user", userRoute);
-
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(express.static(path.join(__dirname, "public")));
 
 mongoConnect(() => {
   app.listen(3030);
