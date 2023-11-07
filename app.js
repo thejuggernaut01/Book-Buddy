@@ -1,6 +1,7 @@
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 
 const shopRoute = require("./routes/shop");
 const authRoute = require("./routes/auth");
