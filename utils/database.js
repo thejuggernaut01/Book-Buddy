@@ -15,8 +15,8 @@ const mongoConnect = (callback) => {
       callback();
     })
     .catch((err) => {
-      console.log(err);
-      throw err;
+      console.log("Error connecting to MongoDB:", err.message);
+      // throw err;
     });
 };
 

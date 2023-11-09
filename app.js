@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { mongoConnect } = require("./utils/database");
 const multer = require("multer");
+const csurf = require("csurf");
 
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -12,6 +13,8 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const shopRoute = require("./routes/shop");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
+
+const csrfProtection = csurf();
 
 const app = express();
 require("dotenv").config();
@@ -25,10 +28,16 @@ app.use(
   session({
     resave: false,
     saveUninitialized: false,
-    secret: "aythejuggernaut is going to be one of the best cloud engineer",
+    secret: "aythejuggernaut, the best cloud engineer",
     store: store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 24 hours
+      secure: true,
+    },
   })
 );
+
+app.use(csrfProtection);
 
 app.set("view engine", "ejs");
 app.set("views", "views");
