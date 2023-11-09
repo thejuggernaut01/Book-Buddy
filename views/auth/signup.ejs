@@ -12,7 +12,7 @@
       <div class="flex flex-col mt-5 md:flex-row gap-5">
         <div class="space-y-5 md:flex-1">        
 
-          <form action="" class="space-y-5">
+          <form action="/signup" method="post" class="space-y-5">
             <div class="flex flex-col space-y-1">
               <label for="firstName" class="text-sm font-semibold">Legal first name*</label>
               <input type="text" name="firstName" id="firstName" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Legal first name" required style="transition: outline 0.7s ease-in-out">
@@ -30,7 +30,12 @@
 
             <div class="flex flex-col space-y-1">
               <label for="password" class="text-sm font-semibold">Password*</label>
-              <input type="text" name="password" id="password" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Minimum 8 characters" required style="transition: outline 0.7s ease-in-out">
+              <input type="password" name="password" id="password" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Minimum 8 characters" required style="transition: outline 0.7s ease-in-out">
+            </div>
+
+            <div class="flex flex-col space-y-1">
+              <label for="age" class="text-sm font-semibold">Age*</label>
+              <input type="text" name="age" id="age" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Enter your age" required style="transition: outline 0.7s ease-in-out">
             </div>
 
             <div class="flex items-center gap-5">
