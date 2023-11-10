@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const { getDB } = require("../utils/database");
+const bycryptjs = require("bcryptjs");
 
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
@@ -21,13 +23,28 @@ exports.postSignUp = (req, res, next) => {
   const password = req.body.password;
   const age = req.body.age;
 
-  const user = new User({
-    firstName,
-    lastName,
-    email,
-    password,
-    age,
-  });
+  const db = getDB();
+  db.collection("users")
+    .findOne({ email: email })
+    .then((result) => {
+      if (result) {
+        return res.redirect("/signup");
+      }
 
-  user.save();
+      bycryptjs
+        .hash(password, 12)
+        .then((hashPassword) => {
+          const user = new User(firstName, lastName, email, hashPassword, age);
+          return user.save();
+        })
+        .then((result) => {
+          res.redirect("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
