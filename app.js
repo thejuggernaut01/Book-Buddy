@@ -10,12 +10,6 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-const shopRoute = require("./routes/shop");
-const authRoute = require("./routes/auth");
-const userRoute = require("./routes/user");
-
-const csrfProtection = csurf();
-
 const app = express();
 require("dotenv").config();
 
@@ -24,26 +18,35 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
+const csrfProtection = csurf();
+
+app.set("view engine", "ejs");
+app.set("views", "views");
+
+const shopRoute = require("./routes/shop");
+const authRoute = require("./routes/auth");
+const userRoute = require("./routes/user");
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "/public")));
+
 app.use(
   session({
     resave: false,
     saveUninitialized: false,
     secret: "aythejuggernaut, the best cloud engineer",
     store: store,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 24 hours
-      secure: true,
-    },
   })
 );
 
 app.use(csrfProtection);
 
-app.set("view engine", "ejs");
-app.set("views", "views");
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "/public")));
+  next();
+});
 
 app.use("/user", userRoute);
 app.use(shopRoute);
