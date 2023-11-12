@@ -2,7 +2,6 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { mongoConnect } = require("./utils/database");
-const multer = require("multer");
 const csurf = require("csurf");
 
 const session = require("express-session");
@@ -17,6 +16,7 @@ require("dotenv").config();
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
+  expires: 1000 * 60 * 60 * 24 * 5,
 });
 
 const csrfProtection = csurf();
@@ -38,6 +38,10 @@ app.use(
     saveUninitialized: false,
     secret: "aythejuggernaut, the best cloud engineer",
     store: store,
+    cookie: {
+      sameSite: "strict",
+      httpOnly: true,
+    },
   })
 );
 
