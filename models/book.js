@@ -27,7 +27,7 @@ class Book {
 
   save() {
     let db = getDB();
-    return db;
+    return db.collection("books").insertOne(this);
   }
 }
 
