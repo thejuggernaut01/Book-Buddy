@@ -1,4 +1,7 @@
+const mongodb = require("mongodb");
+
 const { getDB } = require("../utils/database");
+const ObjectId = mongodb.ObjectId;
 
 class Book {
   constructor(
@@ -7,7 +10,8 @@ class Book {
     author,
     publicationDate,
     rating,
-    image,
+    bookFile,
+    bookImage,
     pages,
     language,
     readingAge,
@@ -18,7 +22,8 @@ class Book {
     this.author = author;
     this.publicationDate = publicationDate;
     this.rating = rating;
-    this.image = image;
+    this.bookFile = bookFile;
+    this.bookImage = bookImage;
     this.pages = pages;
     this.language = language;
     this.readingAge = readingAge;
@@ -26,8 +31,19 @@ class Book {
   }
 
   save() {
-    let db = getDB();
+    const db = getDB();
     return db.collection("books").insertOne(this);
+  }
+
+  static fetchAll() {
+    const db = getDB();
+    const projection = { bookImage: 1, title: 1, author: 1 };
+    return db.collection("books").find().project(projection).toArray();
+  }
+
+  static findById(bookId) {
+    const db = getDB();
+    return db.collection("books").findOne({ _id: new ObjectId(bookId) });
   }
 }
 
