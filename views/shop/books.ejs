@@ -4,5 +4,24 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
 
-    
+                <main class="h-screen w-[90%] md:w-[95%] md:flex justify-center mx-auto space-y-5 md:space-y-0 md:gap-5 mt-5">
+                <% if (books.length > 0) { %>
+                    <% for (let book of books) { %>
+                        <div class="bg-white max-w-sm rounded overflow-hidden shadow-lg h-[480px] w-[90%] md:w-[95%] mx-auto">
+                            <img class="w-full h-64 object-fill" src="<%= book.bookImage %>" alt="<%= book.title %> book cover">
+                            <div class="p-6">
+                                <div class="font-bold text-sm mb-2"><%= book.title %></div>
+                                <p class="text-gray-700 text-xs mb-4"><%= book.author %></p>
+
+                                <button class="bg-[#1c46cf] text-white font-bold py-2 px-4 rounded-full">
+                                    <a href="/books/<%= book._id %>">Read More</a>
+                                </button>
+                            </div>
+                        </div>
+                    <% } %>
+
+                <% } else { %>
+                    <h1>No Books Found!</h1>
+                <% } %>
+            </main>
 <%- include('../includes/end.ejs') %>

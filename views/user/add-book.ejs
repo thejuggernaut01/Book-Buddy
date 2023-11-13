@@ -25,9 +25,41 @@
               <input type="text" name="authorName" id="authorName" class="border border-gray-400 h-12 rounded-lg outline-2 outline-transparent pl-4 text-xs md:text-sm lg:text-base placeholder:text-xs md:placeholder:text-sm lg:placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Enter author's name" required style="transition: outline 0.7s ease-in-out">
             </div>
 
+            <div class="flex flex-col space-y-1">
+              <label for="image" class="text-sm font-semibold">Book Image <span class="text-red-700">*</span></label>
+              <input type="file" name="image" id="image" required>
+            </div>
+
             <div class="h-[155px] border border-gray-400 border-dotted rounded-md">
-                <label for="file">Upload File</label>
-                <input type="file" name="file" id="file">
+               <label id="dragContainer" for="file" class="h-[150px] w-full text-sm flex justify-center items-center flex-col text-gray-400 cursor-pointer">
+                   <div class="p-2 mb-3 bg-blue-100 border border-blue-100 rounded-full">
+                       <svg
+                           xmlns="http://www.w3.org/2000/svg"
+                           fill="none"
+                           viewBox="0 0 24 24"
+                           strokeWidth="1.5"
+                           stroke="#0048AD"
+                           class="w-6 h-6"
+                       >
+                           <path
+                               strokeLinecap="round"
+                               strokeLinejoin="round"
+                               d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                           />
+                         </svg>
+                   </div>
+                   <p class="font-bold text-blue-600">Click to upload book pdf file</p>
+   
+                   <div class="mt-2 space-y-1">
+                       <p class="px-4 text-[0.6rem] text-center leading-none">
+                           The supported format is .pdf
+                       </p>
+
+                        <!-- Display the selected file name -->
+                        <p id="selectedFileName" class="px-4 text-sm font-semibold text-center leading-none text-blue-600"></p>
+                    </div>
+                </label>
+                <input type="file" name="file" id="file" hidden onchange="displayFileName(this)" required>
            </div>
 
            <div class="flex gap-10 w-[100%]">
