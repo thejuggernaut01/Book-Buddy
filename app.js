@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { mongoConnect } = require("./utils/database");
 const csurf = require("csurf");
+const multer = require("multer");
 
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -21,6 +22,23 @@ const store = new MongoDBStore({
 
 const csrfProtection = csurf();
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "files");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now().toString() + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "application/pdf") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -30,7 +48,12 @@ const userRoute = require("./routes/user");
 const User = require("./models/user");
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("file")
+);
+
 app.use(express.static(path.join(__dirname, "/public")));
+app.use("/files", express.static(path.join(__dirname, "files")));
 
 app.use(
   session({
