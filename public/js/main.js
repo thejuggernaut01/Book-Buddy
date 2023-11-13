@@ -18,20 +18,8 @@ function menuToggleClickHandler() {
 backdrop.addEventListener("click", backdropClickHandler);
 menuToggle.addEventListener("click", menuToggleClickHandler);
 
-// dragover and dragenter events need to have 'preventDefault' called
-// in order for the 'drop' event to register.
-// dropContainer.ondragover = dropContainer.ondragenter = function (evt) {
-//   evt.preventDefault();
-// };
-
-// dropContainer.ondrop = function (evt) {
-//   evt.preventDefault();
-//   // pretty simple -- but not for IE :(
-//   uploadFile.files = evt.dataTransfer.files;
-
-//   // If you want to use some of the dropped files
-//   const dT = new DataTransfer();
-//   dT.items.add(evt.dataTransfer.files[0]);
-//   dT.items.add(evt.dataTransfer.files[3]);
-//   uploadFile.files = dT.files;
-// };
+function displayFileName(input) {
+  const selectedFileNameElement = document.getElementById("selectedFileName");
+  const fileName = input.files[0].name;
+  selectedFileNameElement.innerText = `${fileName}`;
+}
