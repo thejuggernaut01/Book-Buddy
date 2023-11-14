@@ -4,7 +4,7 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
 
-                <main class="h-screen w-[90%] md:w-[95%] md:flex justify-center mx-auto space-y-5 md:space-y-0 md:gap-5 mt-5">
+                <main class="h-screen w-[90%] md:w-[95%] md:flex justify-center mx-auto space-y-5 md:space-y-0 md:gap-5 mt-5 flex-wrap">
                 <% if (books.length > 0) { %>
                     <% for (let book of books) { %>
                         <div class="bg-white max-w-sm rounded overflow-hidden shadow-lg h-[480px] w-[90%] md:w-[95%] mx-auto">
@@ -21,7 +21,7 @@
                     <% } %>
 
                 <% } else { %>
-                    <h1>No Books Found!</h1>
+                    <h1 class="text-4xl font-semibold">No Book Available!</h1>
                 <% } %>
             </main>
 <%- include('../includes/end.ejs') %>

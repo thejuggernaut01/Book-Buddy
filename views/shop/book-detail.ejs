@@ -4,7 +4,51 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
 
-    <main>
-        
+    <main class="w-[93%] mx-auto space-y-7 md:flex lg:mt-5">
+        <aside class="space-y-7 flex-1">
+            <img src="<%= book.bookImage %>" alt="<%= book.title %> book image" class="w-full h-[400px] object-contain">
+        </aside>
+
+        <article class="space-y-4 flex-1">
+            <h2 class="font-semibold text-lg text-center"><%= book.title %></h2>
+            <p class="text-center text-gray-400 text-sm">Author: <%= book.author %></p>
+            <p class="text-gray-800 text-sm text-justify"><%= book.description %></p>
+
+            <div class="flex flex-col space-y-6 w-[90%] mx-auto">
+                <div class="flex gap-5">
+                    <div class="text-center flex flex-1 flex-col">
+                        <p class="font-semibold text-sm">Publication Date</p>
+                        <p class="text-gray-400 text-xs md:text-sm block"><%= book.publicationDate %></p>
+                    </div>
+
+                    <p  class="text-center flex flex-1 flex-col">
+                        <span class="font-semibold text-sm">Rating</span>
+                        <span class="text-gray-400 text-xs md:text-sm"><%= book.rating %></span>
+                    </p>
+                    <p  class="text-center flex flex-1 flex-col">
+                        <span class="font-semibold text-sm">Pages</span>
+                        <span class="text-gray-400 text-xs md:text-sm"><%= book.pages %></span>
+                    </p>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="text-center flex flex-1 flex-col">
+                        <p class="font-semibold text-sm">Language</p>
+                        <p class="text-gray-400 text-xs md:text-sm block"><%= book.language %></p>
+                    </div>
+
+                    <p  class="text-center flex flex-1 flex-col">
+                        <span class="font-semibold text-sm">Reading Age</span>
+                        <span class="text-gray-400 text-xs md:text-sm"><%= book.readingAge %></span>
+                    </p>
+                    <p  class="text-center flex flex-1 flex-col">
+                        <span class="font-semibold text-sm">ISBN - 13</span>
+                        <span class="text-gray-400 text-xs md:text-sm"><%= book.isbn13 %></span>
+                    </p>
+                </div>
+
+                <button type="submit" class="border border-[#0052FF] rounded-full w-full h-14 bg-[#0052FF] text-white text-lg font-semibold hover:shadow-2xl hover:-translate-y-[0.1rem]">Download PDF</button>
+            </div>
+        </article>
     </main>
 <%- include('../includes/end.ejs') %>

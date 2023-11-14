@@ -14,7 +14,9 @@
 
       <% if (isAuthenticated) { %>
       <li class="main-header__item">
-        <a class="<%= path === '/favorite' ? 'active' : '' %>" href="/favorite"
+        <a
+          class="<%= path === '/user/favorite' ? 'active' : '' %>"
+          href="/user/favorite"
           >Favorite</a
         >
       </li>
@@ -72,7 +74,9 @@
 
     <% if (isAuthenticated) { %>
     <li class="mobile-nav__item">
-      <a class="<%= path === '/favorite' ? 'active' : '' %>" href="/favorite"
+      <a
+        class="<%= path === '/user/favorite' ? 'active' : '' %>"
+        href="/user/favorite"
         >Favorite</a
       >
     </li>
