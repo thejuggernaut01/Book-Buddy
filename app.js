@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const { mongoConnect } = require("./utils/database");
 const csurf = require("csurf");
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
 
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -22,6 +23,13 @@ const store = new MongoDBStore({
 
 const csrfProtection = csurf();
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  secure: true,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "files");
@@ -32,7 +40,12 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "application/pdf") {
+  if (
+    file.mimetype === "application/pdf" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
     cb(null, true);
   } else {
     cb(null, false);
@@ -42,14 +55,18 @@ const fileFilter = (req, file, cb) => {
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-const shopRoute = require("./routes/shop");
+const shopRoute = require("./routes/bookshop");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const User = require("./models/user");
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("file")
+  multer({ storage: fileStorage, fileFilter: fileFilter }).fields([
+    { name: "file", maxCount: 1 },
+    { name: "image", maxCount: 1 },
+  ])
 );
 
 app.use(express.static(path.join(__dirname, "/public")));
