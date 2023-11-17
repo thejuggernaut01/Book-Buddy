@@ -53,6 +53,7 @@ exports.postSignUp = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const age = req.body.age;
+  const favorite = { books: [] };
 
   const db = getDB();
   db.collection("users")
@@ -65,7 +66,14 @@ exports.postSignUp = (req, res, next) => {
       bycryptjs
         .hash(password, 12)
         .then((hashPassword) => {
-          const user = new User(firstName, lastName, email, hashPassword, +age);
+          const user = new User(
+            firstName,
+            lastName,
+            email,
+            hashPassword,
+            +age,
+            favorite
+          );
           return user.save();
         })
         .then((result) => {
@@ -83,6 +91,6 @@ exports.postSignUp = (req, res, next) => {
 exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
-    res.redirect("/");
+    res.redirect("/login");
   });
 };
