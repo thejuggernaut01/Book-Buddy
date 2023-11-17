@@ -47,6 +47,19 @@ class Book {
     const db = getDB();
     return db.collection("books").findOne({ _id: new ObjectId(bookId) });
   }
+
+  static deleteById(bookId, userId) {
+    const db = getDB();
+    return db
+      .collection("books")
+      .deleteOne({ _id: new mongodb.ObjectId(bookId), userId: userId })
+      .then(() => {
+        console.log("Deleted");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
 
 module.exports = Book;
