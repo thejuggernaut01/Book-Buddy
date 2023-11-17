@@ -7,8 +7,12 @@ const isAuthorized = require("../middleware/isAuthorized");
 
 router.get("/add-book", isAuthorized, userController.getAddBook);
 
-router.post("/add-book", isAuthorized, userController.postBook);
+router.post("/add-book", isAuthorized, userController.postAddBook);
+
+router.get("/edit-book/:bookId", isAuthorized, userController.getEditBook);
 
 router.get("/my-books", isAuthorized, userController.getMyBooks);
+
+router.get("/favorite", isAuthorized, userController.getFavorite);
 
 module.exports = router;
