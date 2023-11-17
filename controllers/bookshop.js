@@ -10,6 +10,7 @@ exports.getHome = (req, res, next) => {
 exports.getAllBooks = (req, res, next) => {
   Book.fetchAll()
     .then((result) => {
+      console.log(result);
       res.render("shop/books", {
         path: "/books",
         pageTitle: "Available Books",
@@ -31,13 +32,7 @@ exports.getBook = (req, res, next) => {
     res.render("shop/book-detail", {
       path: "/book-detail",
       pageTitle: "Book Detail",
+      book: book,
     });
-  });
-};
-
-exports.getFavorite = (req, res, next) => {
-  res.render("shop/favorite", {
-    path: "/cart",
-    pageTitle: "Your Order",
   });
 };
