@@ -13,6 +13,11 @@ class User {
     const db = getDB();
     return db.collection("users").insertOne(this);
   }
+
+  static fetchMyBooks(userId) {
+    const db = getDB();
+    return db.collection("books").find({ userId: userId }).toArray();
+  }
 }
 
 module.exports = User;

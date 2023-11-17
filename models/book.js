@@ -15,7 +15,8 @@ class Book {
     pages,
     language,
     readingAge,
-    isbn13
+    isbn13,
+    userId
   ) {
     this.title = title;
     this.description = description;
@@ -28,6 +29,7 @@ class Book {
     this.language = language;
     this.readingAge = readingAge;
     this.isbn13 = isbn13;
+    this.userId = userId;
   }
 
   save() {
