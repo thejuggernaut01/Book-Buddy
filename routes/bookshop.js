@@ -10,6 +10,4 @@ router.get("/books", shopController.getAllBooks);
 
 router.get("/books/:bookId", shopController.getBook);
 
-router.get("/favorite", isAuthorized, shopController.getFavorite);
-
 module.exports = router;
