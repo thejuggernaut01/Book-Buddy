@@ -21,3 +21,27 @@ const deleteBookHandler = (btn) => {
       console.log(err);
     });
 };
+
+const favoriteBtn = (btn) => {
+  const bookId = btn.parentNode.querySelector("[name=bookId]").value;
+  const csrf = btn.parentNode.querySelector("[name=_csrf]").value;
+
+  if (btn.style.stroke === "") {
+    btn.style.stroke = "red";
+    btn.style.fill = "red";
+
+    fetch("/user/favorite/" + bookId, {
+      method: "POST",
+      headers: {
+        "csrf-token": csrf,
+      },
+    })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err.message));
+  } else {
+    btn.style.stroke = "";
+    btn.style.fill = "none";
+  }
+};

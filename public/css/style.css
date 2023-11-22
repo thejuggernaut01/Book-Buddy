@@ -485,35 +485,8 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
-.absolute {
-  position: absolute;
-}
 .relative {
   position: relative;
-}
-.left-0 {
-  left: 0px;
-}
-.right-0 {
-  right: 0px;
-}
-.top-0 {
-  top: 0px;
-}
-.-left-5 {
-  left: -1.25rem;
-}
-.right-5 {
-  right: 1.25rem;
-}
-.left-3 {
-  left: 0.75rem;
-}
-.right-3 {
-  right: 0.75rem;
-}
-.top-3 {
-  top: 0.75rem;
 }
 .mx-auto {
   margin-left: auto;
@@ -567,6 +540,9 @@ video {
 .h-\[155px\] {
   height: 155px;
 }
+.h-\[275px\] {
+  height: 275px;
+}
 .h-\[400px\] {
   height: 400px;
 }
@@ -581,12 +557,6 @@ video {
 }
 .h-screen {
   height: 100vh;
-}
-.h-72 {
-  height: 18rem;
-}
-.h-\[275px\] {
-  height: 275px;
 }
 .w-4 {
   width: 1rem;
@@ -615,20 +585,17 @@ video {
 .w-full {
   width: 100%;
 }
-.max-w-sm {
-  max-width: 24rem;
-}
 .max-w-md {
   max-width: 28rem;
+}
+.max-w-sm {
+  max-width: 24rem;
 }
 .flex-1 {
   flex: 1 1 0%;
 }
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.animate-\[top-3_1s_ease-in-out\] {
-  animation: top-3 1s ease-in-out;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -651,6 +618,9 @@ video {
 .justify-center {
   justify-content: center;
 }
+.justify-between {
+  justify-content: space-between;
+}
 .gap-10 {
   gap: 2.5rem;
 }
@@ -662,6 +632,11 @@ video {
 }
 .gap-y-6 {
   row-gap: 1.5rem;
+}
+.space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(1rem * var(--tw-space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
@@ -687,11 +662,6 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.75rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.75rem * var(--tw-space-y-reverse));
-}
-.space-x-4 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 0;
-  margin-right: calc(1rem * var(--tw-space-x-reverse));
-  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .overflow-hidden {
   overflow: hidden;
@@ -766,6 +736,10 @@ video {
   padding-left: 4rem;
   padding-right: 4rem;
 }
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -774,18 +748,11 @@ video {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
 .pl-4 {
   padding-left: 1rem;
 }
 .pt-4 {
   padding-top: 1rem;
-}
-.pb-3 {
-  padding-bottom: 0.75rem;
 }
 .text-center {
   text-align: center;
@@ -885,21 +852,10 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
-.transition-transform {
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-}
-.duration-200 {
-  transition-duration: 200ms;
-}
-.duration-700 {
-  transition-duration: 700ms;
 }
 .duration-300 {
   transition-duration: 300ms;
@@ -927,15 +883,6 @@ video {
   --tw-translate-y: -0.1rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
-.hover\:stroke-red-700:hover {
-  stroke: #b91c1c;
-}
-.hover\:stroke-red-500:hover {
-  stroke: #ef4444;
-}
-.hover\:stroke-\[\#1c46cf\]:hover {
-  stroke: #1c46cf;
-}
 .hover\:shadow-2xl:hover {
   --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
@@ -946,12 +893,6 @@ video {
 }
 .focus\:outline-\[\#0052FF\]:focus {
   outline-color: #0052FF;
-}
-.group:hover .group-hover\:right-3 {
-  right: 0.75rem;
-}
-.group:hover .group-hover\:block {
-  display: block;
 }
 @media (min-width: 640px) {
 
