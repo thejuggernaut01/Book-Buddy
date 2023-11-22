@@ -15,6 +15,8 @@ router.get("/my-books", isAuthorized, userController.getMyBooks);
 
 router.get("/favorite", isAuthorized, userController.getFavorite);
 
+router.post("/favorite/:bookId", isAuthorized, userController.addFavorite);
+
 router.delete("/my-books/:bookId", userController.deleteBook);
 
 module.exports = router;
