@@ -54,8 +54,9 @@ exports.postAddBook = async (req, res, next) => {
 
     let bookFileUrl = {
       secureUrl: imageResponses[0].secure_url,
-      public_id: `${imageResponses[0].public_id}.pdf`,
+      public_id: imageResponses[0].public_id,
     };
+
     let bookImageUrl = {
       secureUrl: imageResponses[1].secure_url,
       public_id: imageResponses[1].public_id,
@@ -106,9 +107,49 @@ exports.getEditBook = (req, res, next) => {
 exports.postEditBook = (req, res, next) => {};
 
 exports.getFavorite = (req, res, next) => {
-  console.log(req.session.user._id.toString());
   res.render("shop/favorite", {
     path: "/user/favorite",
     pageTitle: "Your Favorites",
   });
+};
+
+exports.addFavorite = (req, res, next) => {
+  const bookId = req.params.bookId;
+  const userId = req.session.user._id;
+
+  User.addToFavorite(bookId, userId)
+    .then((result) => {
+      res.status(200).json({ message: "Added to favorites successfully" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+};
+
+exports.deleteBook = async (req, res, next) => {
+  const bookId = req.params.bookId;
+  const userId = req.session.user._id.toString();
+
+  Book.findById(bookId)
+    .then((book) => {
+      if (!book) {
+        console.log("Bok not found!");
+      }
+
+      const { bookFile, bookImage } = book;
+      const bookAssets = [bookFile.public_id, bookImage.public_id];
+
+      bookAssets.map(async (asset) => {
+        await cloudinary.v2.api.delete_resources(asset);
+      });
+
+      return Book.deleteById(bookId, userId).then(() => {
+        res.status(200).json({ message: "Success!" });
+      });
+    })
+    .catch((err) => {
+      console.log("Error " + err.message);
+      res.status(500).json({ message: "Deleting product failed!" });
+    });
 };
