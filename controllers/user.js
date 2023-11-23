@@ -106,24 +106,33 @@ exports.getEditBook = (req, res, next) => {
 
 exports.postEditBook = (req, res, next) => {};
 
-exports.getFavorite = (req, res, next) => {
-  res.render("shop/favorite", {
-    path: "/user/favorite",
-    pageTitle: "Your Favorites",
-  });
-};
-
 exports.addFavorite = (req, res, next) => {
   const bookId = req.params.bookId;
   const userId = req.session.user._id;
 
   User.addToFavorite(bookId, userId)
-    .then((result) => {
+    .then(() => {
       res.status(200).json({ message: "Added to favorites successfully" });
     })
     .catch((err) => {
       console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
+    });
+};
+
+exports.getFavorite = (req, res, next) => {
+  const userId = req.session.user._id;
+
+  User.getFavorite(userId)
+    .then((result) => {
+      res.render("shop/favorite", {
+        path: "/user/favorite",
+        pageTitle: "Your Favorites",
+        favorite: result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 
