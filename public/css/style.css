@@ -585,6 +585,33 @@ video {
 .w-full {
   width: 100%;
 }
+.w-10 {
+  width: 2.5rem;
+}
+.w-\[150px\] {
+  width: 150px;
+}
+.w-\[350px\] {
+  width: 350px;
+}
+.w-\[200px\] {
+  width: 200px;
+}
+.w-\[90\] {
+  width: 90;
+}
+.w-\[50\] {
+  width: 50;
+}
+.w-\[80\%\] {
+  width: 80%;
+}
+.w-\[95\%\] {
+  width: 95%;
+}
+.w-\[98\%\] {
+  width: 98%;
+}
 .max-w-md {
   max-width: 28rem;
 }
@@ -627,6 +654,12 @@ video {
 .gap-5 {
   gap: 1.25rem;
 }
+.gap-4 {
+  gap: 1rem;
+}
+.gap-2 {
+  gap: 0.5rem;
+}
 .gap-y-3 {
   row-gap: 0.75rem;
 }
@@ -666,6 +699,12 @@ video {
 .overflow-hidden {
   overflow: hidden;
 }
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+.whitespace-nowrap {
+  white-space: nowrap;
+}
 .rounded {
   border-radius: 0.25rem;
 }
@@ -695,6 +734,10 @@ video {
 .border-gray-400 {
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
+}
+.border-gray-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 .bg-\[\#0052FF\] {
   --tw-bg-opacity: 1;
@@ -731,6 +774,9 @@ video {
 }
 .p-6 {
   padding: 1.5rem;
+}
+.p-3 {
+  padding: 0.75rem;
 }
 .px-16 {
   padding-left: 4rem;
@@ -782,6 +828,10 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 .font-bold {
   font-weight: 700;
@@ -919,6 +969,10 @@ video {
     width: 95%;
   }
 
+  .md\:w-\[400px\] {
+    width: 400px;
+  }
+
   .md\:flex-1 {
     flex: 1 1 0%;
   }
@@ -935,6 +989,10 @@ video {
     gap: 1.25rem;
   }
 
+  .md\:gap-6 {
+    gap: 1.5rem;
+  }
+
   .md\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-y-reverse: 0;
     margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
@@ -944,6 +1002,11 @@ video {
   .md\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  .md\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 
   .md\:placeholder\:text-sm::-moz-placeholder {
@@ -983,6 +1046,26 @@ video {
     width: 85%;
   }
 
+  .lg\:w-full {
+    width: 100%;
+  }
+
+  .lg\:w-\[800px\] {
+    width: 800px;
+  }
+
+  .lg\:w-\[600px\] {
+    width: 600px;
+  }
+
+  .lg\:w-\[700px\] {
+    width: 700px;
+  }
+
+  .lg\:gap-9 {
+    gap: 2.25rem;
+  }
+
   .lg\:text-5xl {
     font-size: 3rem;
     line-height: 1;
@@ -991,6 +1074,11 @@ video {
   .lg\:text-base {
     font-size: 1rem;
     line-height: 1.5rem;
+  }
+
+  .lg\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 
   .lg\:placeholder\:text-base::-moz-placeholder {

@@ -2,8 +2,7 @@ const deleteBookHandler = (btn) => {
   const bookId = btn.parentNode.querySelector("[name=bookId]").value;
   const csrf = btn.parentNode.querySelector("[name=_csrf]").value;
 
-  const parentElement = btn.closest("article");
-  console.log(parentElement);
+  // const parentElement = btn.closest("article");
 
   fetch("/user/my-books/" + bookId, {
     method: "DELETE",
@@ -36,12 +35,28 @@ const favoriteBtn = (btn) => {
         "csrf-token": csrf,
       },
     })
-      .then((result) => {
-        console.log(result);
-      })
+      .then((result) => {})
       .catch((err) => console.log(err.message));
   } else {
     btn.style.stroke = "";
     btn.style.fill = "none";
   }
+};
+
+const deleteFavorite = (btn) => {
+  const bookId = btn.parentElement.querySelector("[name=bookId]").value;
+  const csrf = btn.parentElement.querySelector("[name=_csrf]").value;
+
+  fetch("/user/favorite/" + bookId, {
+    method: "DELETE",
+    headers: {
+      "csrf-token": csrf,
+    },
+  })
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
