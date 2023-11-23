@@ -106,36 +106,6 @@ exports.getEditBook = (req, res, next) => {
 
 exports.postEditBook = (req, res, next) => {};
 
-exports.addFavorite = (req, res, next) => {
-  const bookId = req.params.bookId;
-  const userId = req.session.user._id;
-
-  User.addToFavorite(bookId, userId)
-    .then(() => {
-      res.status(200).json({ message: "Added to favorites successfully" });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({ error: "Internal Server Error" });
-    });
-};
-
-exports.getFavorite = (req, res, next) => {
-  const userId = req.session.user._id;
-
-  User.getFavorite(userId)
-    .then((result) => {
-      res.render("shop/favorite", {
-        path: "/user/favorite",
-        pageTitle: "Your Favorites",
-        favorite: result,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
 exports.deleteBook = async (req, res, next) => {
   const bookId = req.params.bookId;
   const userId = req.session.user._id.toString();
@@ -160,5 +130,51 @@ exports.deleteBook = async (req, res, next) => {
     .catch((err) => {
       console.log("Error " + err.message);
       res.status(500).json({ message: "Deleting product failed!" });
+    });
+};
+
+exports.addFavorite = (req, res, next) => {
+  const bookId = req.params.bookId;
+  const userId = req.session.user._id;
+
+  User.addToFavorite(bookId, userId)
+    .then(() => {
+      res.status(200).json({ message: "Added to favorites successfully" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+};
+
+exports.getFavorite = (req, res, next) => {
+  const userId = req.session.user._id;
+
+  User.getFavorite(userId)
+    .then((result) => {
+      res.render("user/favorite", {
+        path: "/user/favorite",
+        pageTitle: "Your Favorites",
+        favorites: result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.deletFavorite = (req, res, next) => {
+  const bookId = req.params.bookId;
+  const userId = req.session.user._id;
+
+  User.deleteFavorite(bookId, userId)
+    .then((result) => {
+      res
+        .status(200)
+        .json({ message: "Deleted book from favorites successfully" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Internal Server Error" });
     });
 };
