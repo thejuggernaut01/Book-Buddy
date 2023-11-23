@@ -54,6 +54,7 @@ class User {
 
   static getFavorite(userId) {
     const db = getDB();
+    const projection = { title: 1, author: 1 };
     // something is wrong with this._id
     // i get empy array when i use this._id
     // that's why i accepted the userId (req.session.user._id)
@@ -74,7 +75,28 @@ class User {
         return db
           .collection("books")
           .find({ _id: { $in: bookIds } })
+          .project(projection)
           .toArray();
+      });
+  }
+
+  static deleteFavorite(bookId, userId) {
+    const db = getDB();
+
+    return db
+      .collection("users")
+      .findOne({ _id: new ObjectId(userId) })
+      .then((user) => {
+        const updatedFavoriteBooks = user.favorite.books.filter((book) => {
+          return book.bookId.toString() !== bookId;
+        });
+
+        return db
+          .collection("users")
+          .updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: { favorite: { books: updatedFavoriteBooks } } }
+          );
       });
   }
 }
