@@ -2,7 +2,7 @@ const deleteBookHandler = (btn) => {
   const bookId = btn.parentNode.querySelector("[name=bookId]").value;
   const csrf = btn.parentNode.querySelector("[name=_csrf]").value;
 
-  // const parentElement = btn.closest("article");
+  const parentElement = btn.closest("article");
 
   fetch("/user/my-books/" + bookId, {
     method: "DELETE",
@@ -46,6 +46,7 @@ const favoriteBtn = (btn) => {
 const deleteFavorite = (btn) => {
   const bookId = btn.parentElement.querySelector("[name=bookId]").value;
   const csrf = btn.parentElement.querySelector("[name=_csrf]").value;
+  const parentElement = btn.closest("article");
 
   fetch("/user/favorite/" + bookId, {
     method: "DELETE",
@@ -54,7 +55,10 @@ const deleteFavorite = (btn) => {
     },
   })
     .then((result) => {
-      console.log(result);
+      return result.json();
+    })
+    .then((data) => {
+      parentElement.parentNode.removeChild(parentElement);
     })
     .catch((err) => {
       console.log(err);
