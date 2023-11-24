@@ -14,7 +14,7 @@
             <% } %>
         </h2>
         
-        <form action="/user/add-book" method="POST" class="flex flex-col gap-y-3" enctype="multipart/form-data">
+        <form action="/user/<% if (editing) { %>edit-book/<%= book._id %><% } else { %>add-book<% } %>" method="POST" class="flex flex-col gap-y-3" enctype="multipart/form-data">
             <div class="flex flex-col space-y-1">
               <label for="title" class="text-sm font-semibold">Title <span class="text-red-700">*</span></label>
               <input type="text" name="title" id="title" class="border border-gray-400 h-12 rounded-lg outline-2 outline-transparent placeholder:text-xs pl-4 text-xs md:text-sm lg:text-base md:placeholder:text-sm lg:placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Enter book title" required style="transition: outline 0.7s ease-in-out" value="<% if (editing) { %><%= book.title %><% } %>">
@@ -33,7 +33,7 @@
 
             <div class="flex flex-col space-y-1">
               <label for="image" class="text-sm font-semibold">Book Cover Art <span class="text-red-700">*</span></label>
-              <input type="file" name="image" id="image" required>
+              <input type="file" name="image" id="image" >
             </div>
 
             <div class="h-[155px] border border-gray-400 border-dotted rounded-md">
@@ -65,7 +65,7 @@
                         <p id="selectedFileName" class="px-4 text-sm font-semibold text-center leading-none text-blue-600"></p>
                     </div>
                 </label>
-                <input type="file" name="file" id="file" hidden onchange="displayFileName(this)" required>
+                <input type="file" name="file" id="file" hidden onchange="displayFileName(this)">
            </div>
 
            <div class="flex gap-10 w-[100%]">
