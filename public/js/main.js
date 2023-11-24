@@ -20,6 +20,6 @@ menuToggle.addEventListener("click", menuToggleClickHandler);
 
 function displayFileName(input) {
   const selectedFileNameElement = document.getElementById("selectedFileName");
-  const fileName = input.files[0].name;
+  const fileName = input?.files[0].name;
   selectedFileNameElement.innerText = `${fileName}`;
 }
