@@ -40,7 +40,14 @@ class Book {
   static fetchAll() {
     const db = getDB();
     const projection = { bookImage: 1, title: 1, author: 1 };
-    return db.collection("books").find().project(projection).toArray();
+    return (
+      db
+        .collection("books")
+        .find()
+        // .find({ readingAge: { $lte: age } })
+        .project(projection)
+        .toArray()
+    );
   }
 
   static findById(bookId) {

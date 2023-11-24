@@ -99,6 +99,17 @@ class User {
           );
       });
   }
+
+  static myReadingAge(userId) {
+    const db = getDB();
+    const projection = { age: 1 };
+
+    return db
+      .collection("users")
+      .find({ _id: new ObjectId(userId) })
+      .project(projection)
+      .toArray();
+  }
 }
 
 module.exports = User;
