@@ -70,9 +70,9 @@ exports.postAddBook = async (req, res, next) => {
       rating,
       bookFileUrl,
       bookImageUrl,
-      pages,
+      +pages,
       language,
-      readingAge,
+      +readingAge,
       isbn13,
       userId
     );
@@ -104,7 +104,21 @@ exports.getEditBook = (req, res, next) => {
     });
 };
 
-exports.postEditBook = (req, res, next) => {};
+exports.postEditBook = (req, res, next) => {
+  const bookId = req.params.bookId;
+  const title = req.body.title;
+  const description = req.body.description;
+  const authorName = req.body.authorName;
+  const bookFile = req.files.file;
+  const bookImage = req.files.image;
+  const publicationDate = req.body.publicationDate;
+  const rating = req.body.rating;
+  const pages = req.body.pages;
+  const language = req.body.language;
+  const readingAge = req.body.readingAge;
+  const isbn13 = req.body.isbn13;
+  const userId = req.session.user._id.toString();
+};
 
 exports.deleteBook = async (req, res, next) => {
   const bookId = req.params.bookId;
