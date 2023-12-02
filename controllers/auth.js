@@ -1,11 +1,17 @@
 const User = require("../models/user");
 const { getDB } = require("../utils/database");
-const bycryptjs = require("bcryptjs");
+const bcryptjs = require("bcryptjs");
+const Toastify = require("toastify-js");
 
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
     path: "/login",
     pageTitle: "Login into your account!",
+    errorMessage: false,
+    oldInput: {
+      email: "",
+      password: "",
+    },
   });
 };
 
@@ -16,7 +22,7 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
-exports.postLogin = (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -25,25 +31,50 @@ exports.postLogin = (req, res, next) => {
     .findOne({ email: email })
     .then((user) => {
       if (!user) {
-        return res.redirect("/login");
+        return res.status(401).render("auth/login", {
+          path: "/login",
+          pageTitle: "Login into your account!",
+          errorMessage: "Invalid email or password.",
+          oldInput: {
+            email: email,
+            password: password,
+          },
+          validationErrors: [],
+        });
       }
 
-      bycryptjs
+      bcryptjs
         .compare(password, user.password)
-
         .then((doMatch) => {
           if (doMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
             return req.session.save((err) => {
-              err ? console.log(err) : res.redirect("/");
+              res.redirect("/");
             });
           }
+
+          return res.status(401).render("auth/login", {
+            path: "/login",
+            pageTitle: "Login into your account!",
+            errorMessage: "Invalid email or password.",
+            oldInput: {
+              email: email,
+              password: password,
+            },
+            validationErrors: [],
+          });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/login");
+        });
     })
     .catch((err) => {
-      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 
@@ -63,7 +94,7 @@ exports.postSignUp = (req, res, next) => {
         return res.redirect("/signup");
       }
 
-      bycryptjs
+      bcryptjs
         .hash(password, 12)
         .then((hashPassword) => {
           const user = new User(
