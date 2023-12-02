@@ -9,6 +9,8 @@ const cloudinary = require("cloudinary").v2;
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 
+const errorController = require("./controllers/error");
+
 const MONGODB_URI = process.env.MONGODB_URI;
 const { getDB } = require("./utils/database");
 
@@ -121,6 +123,18 @@ app.use((req, res, next) => {
 app.use("/user", userRoute);
 app.use(shopRoute);
 app.use(authRoute);
+
+app.get("/500", errorController.get500);
+
+app.use(errorController.get400);
+
+app.use((error, req, res, next) => {
+  res.status(500).render("500", {
+    pageTitle: "Error!",
+    path: "/500",
+    isAuthenticated: req.session.isLoggedIn,
+  });
+});
 
 mongoConnect(() => {
   app.listen(3030);
