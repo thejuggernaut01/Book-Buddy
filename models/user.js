@@ -33,7 +33,7 @@ class User {
     }
 
     const favBookIndex = this.favorite?.books.findIndex((item) => {
-      return item.book._id.toString() === bookId.toString();
+      return item.bookId.toString() === bookId.toString();
     });
 
     if (favBookIndex >= 0) {
