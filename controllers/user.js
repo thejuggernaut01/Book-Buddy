@@ -26,8 +26,10 @@ exports.postAddBook = async (req, res, next) => {
   const title = req.body.title;
   const description = req.body.description;
   const authorName = req.body.authorName;
+
   const bookFile = req.files.file;
   const bookImage = req.files.image;
+
   const publicationDate = req.body.publicationDate;
   const rating = req.body.rating;
   const pages = req.body.pages;
@@ -104,7 +106,7 @@ exports.getEditBook = (req, res, next) => {
     });
 };
 
-exports.postEditBook = (req, res, next) => {
+exports.postEditBook = async (req, res, next) => {
   const bookId = req.params.bookId;
   const title = req.body.title;
   const description = req.body.description;
@@ -118,6 +120,34 @@ exports.postEditBook = (req, res, next) => {
   const readingAge = req.body.readingAge;
   const isbn13 = req.body.isbn13;
   const userId = req.session.user._id.toString();
+
+  const bookAssets = [];
+
+  try {
+    if (bookFile) {
+      bookAssets.push(...bookFile);
+      bookAssets.map(async (asset) => {
+        await cloudinary.v2.api.delete_resources(asset);
+      });
+
+      let multiplebookAssets = bookAssets.map((asset) =>
+        cloudinary.v2.uploader.upload(asset.path)
+      );
+    }
+
+    if (bookImage) {
+      bookAssets.push(...bookImage);
+    }
+
+    let multiplebookAssets = bookAssets.map((asset) =>
+      cloudinary.v2.uploader.upload(asset.path)
+    );
+
+    // await all the cloudinary upload functions in promise.all, exactly where the magic happens
+    let imageResponses = await Promise.all(multiplebookAssets);
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 exports.deleteBook = async (req, res, next) => {
@@ -127,7 +157,7 @@ exports.deleteBook = async (req, res, next) => {
   Book.findById(bookId)
     .then((book) => {
       if (!book) {
-        console.log("Bok not found!");
+        console.log("Book not found!");
       }
 
       const { bookFile, bookImage } = book;
@@ -177,15 +207,17 @@ exports.getFavorite = (req, res, next) => {
     });
 };
 
-exports.deletFavorite = (req, res, next) => {
+exports.deleteFavorite = (req, res, next) => {
   const bookId = req.params.bookId;
   const userId = req.session.user._id;
 
   User.deleteFavorite(bookId, userId)
     .then((result) => {
-      res
-        .status(200)
-        .json({ message: "Deleted book from favorites successfully" });
+      if (!result) {
+        throw new Error("Cannot delete favorite book.");
+      }
+
+      res.redirect("/user/favorite");
     })
     .catch((err) => {
       console.log(err);
