@@ -17,10 +17,10 @@ router.get("/favorite", isAuthorized, userController.getFavorite);
 
 router.post("/favorite/:bookId", isAuthorized, userController.addFavorite);
 
+router.post("/favorite/delete-favorite/:bookId", userController.deleteFavorite);
+
 router.post("/edit-book/:bookId", isAuthorized, userController.postEditBook);
 
 router.delete("/my-books/:bookId", userController.deleteBook);
-
-router.delete("/favorite/:bookId", userController.deleteFavorite);
 
 module.exports = router;
