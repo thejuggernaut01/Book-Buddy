@@ -24,6 +24,11 @@ class User {
     return db.collection("books").find({ userId: userId }).toArray();
   }
 
+  static findOne(email) {
+    const db = getDB();
+    return db.collection("users").findOne({ email: email });
+  }
+
   static addToFavorite(bookId, userId) {
     const db = getDB();
 
