@@ -1,7 +1,9 @@
 const User = require("../models/user");
 const { getDB } = require("../utils/database");
 const bcryptjs = require("bcryptjs");
-const Toastify = require("toastify-js");
+
+const { validationResult } = require("express-validator");
+const getMsgForPath = require("../utils/helper");
 
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
@@ -11,6 +13,9 @@ exports.getLogin = (req, res, next) => {
     oldInput: {
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
+      age: "",
     },
   });
 };
@@ -19,6 +24,18 @@ exports.getSignup = (req, res, next) => {
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Create an account!",
+    firstNameErrMsg: "",
+    lastNameErrMsg: "",
+    emailErrMsg: "",
+    pwErrMsg: "",
+
+    oldInput: {
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+      age: "",
+    },
   });
 };
 
@@ -85,6 +102,28 @@ exports.postSignUp = (req, res, next) => {
   const password = req.body.password;
   const age = req.body.age;
   const favorite = { books: [] };
+
+  const errors = validationResult(req);
+  const errorArray = errors.array();
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/signup", {
+      path: "/signup",
+      pageTitle: "Create an account!",
+      firstNameErrMsg: getMsgForPath(errorArray, "firstName"),
+      lastNameErrMsg: getMsgForPath(errorArray, "lastName"),
+      emailErrMsg: getMsgForPath(errorArray, "email"),
+      pwErrMsg: getMsgForPath(errorArray, "password"),
+
+      oldInput: {
+        email,
+        password,
+        firstName,
+        lastName,
+        age,
+      },
+    });
+  }
 
   const db = getDB();
   db.collection("users")
