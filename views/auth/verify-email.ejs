@@ -1,0 +1,27 @@
+<%- include('../includes/head.ejs') %>
+
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+
+    <main class="w-[75%] mx-auto md:w-[65%] lg-[55%] xl:w-[40%] mt-3 relative">
+      <div class="flex flex-col justify-center items-center space-y-5">
+        <img src="/images/verify_email.svg" alt="Verify Email Icon" class="w-[200px] h-[200px]">
+
+        <h2 class="mt-5 text-3xl text-blue-500">Verify your Email</h2>
+        <div class="space-y-2">
+          <p class="text-sm text-center">Thank you for signing up! Please check your email for a verification message. </p>
+          <p class="text-sm text-center">If you haven't received the email, please check your spam/junk folder.</p>
+        </div>
+
+        <a href="https://accounts.google.com/b/0/AddMailService" target="_blank" class="w-full">
+          <button type="submit" class="border border-[#0052FF] rounded-lg h-14 bg-[#0052FF] text-white text-lg font-semibold hover:shadow-2xl hover:-translate-y-[0.1rem] w-full">
+            Continue to email
+          </button>
+        </a>
+
+        <p>Don't receive an email? <span class="text-blue-400">Resend</span></p>
+      </div>
+    </main>
+<%- include('../includes/end.ejs') %>
