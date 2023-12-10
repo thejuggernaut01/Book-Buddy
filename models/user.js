@@ -20,7 +20,7 @@ class User {
     this.password = password;
     this.age = age;
     this.favorite = favorite;
-    this._id = id;
+    // this._id = id;
     this.verified = verified;
   }
 
