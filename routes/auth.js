@@ -10,6 +10,10 @@ router.get("/login", authController.getLogin);
 
 router.get("/signup", authController.getSignup);
 
+router.get("/verify-email", authController.verifyEmail);
+
+router.get("/verify-email/:id");
+
 router.post("/login", authController.postLogin);
 
 router.post(
