@@ -1,4 +1,5 @@
 const bcryptjs = require("bcryptjs");
+const crypto = require("crypto");
 
 const User = require("../models/user");
 
@@ -47,13 +48,43 @@ exports.verifyEmail = (req, res, next) => {
   });
 };
 
+exports.verifiedUser = async (req, res, next) => {
+  const token = req.params.tokenId;
+
+  const db = getDB();
+  const user = await db.collection("users").findOne({
+    verificationToken: token,
+    verificationTokenExpiration: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    const error = new Error("Email verification failed");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  await db.collection("users").updateOne(
+    { email: user.email },
+    {
+      $set: {
+        verified: true,
+        verificationToken: undefined,
+        verificationTokenExpiration: undefined,
+      },
+    }
+  );
+
+  res.render("auth/verified", {
+    path: "/verified",
+    pageTitle: "You're account has been verified!",
+  });
+};
+
 exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const db = getDB();
-  db.collection("users")
-    .findOne({ email: email })
+  User.findOne(email)
     .then((user) => {
       if (!user) {
         return res.status(401).render("auth/login", {
