@@ -277,3 +277,90 @@ exports.postLogout = (req, res, next) => {
     res.redirect("/login");
   });
 };
+
+exports.getReset = (req, res, next) => {
+  res.render("auth/reset", {
+    path: "/reset",
+    pageTitle: "Reset your password",
+    errorMessage: "",
+
+    emailErrMsg: "",
+
+    oldInput: {
+      email: "",
+    },
+  });
+};
+
+exports.postReset = (req, res, next) => {
+  const email = req.body.email;
+
+  // get validation error
+  const errors = validationResult(req);
+  const errorArray = errors.array();
+
+  // check if there's validation error
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/reset", {
+      path: "/reset",
+      pageTitle: "Reset your password",
+      emailErrMsg: getMsgForPath(errorArray, "email"),
+
+      oldInput: {
+        email,
+      },
+    });
+  }
+
+  try {
+    // generate 32 bit token
+    crypto.randomBytes(32, async (err, buffer) => {
+      // check if an error occured when generating token
+      if (err) {
+        return res.redirect("/reset");
+      }
+
+      // converted buffer to hex string
+      const token = buffer.toString("hex");
+      // query db to check whether such email exists
+      const user = await User.findOne(email);
+
+      // if user does not exists in db
+      if (!user) {
+        return res.status(422).render("auth/reset", {
+          path: "/reset",
+          pageTitle: "Reset your password",
+          errorMessage: "User email not found!",
+        });
+      }
+
+      // mail options for nodemailer
+      const mailOptions = {
+        from: '"Book Buddy" bookbuddy@gmail.com',
+        to: email,
+        subject: "Password Reset - Book Buddy",
+        html: `
+          <main>
+            <p>Dear ${user.email},</p>
+
+            <p>We received a request to reset your password on Book Buddy. If you initiated this request, please click the link below to reset your password:</p>
+
+            <p><a href="http://localhost:3030/reset/:${token}">Reset Password</a></p>
+
+            <p>Note: This link is valid for the next 30 minutes. If you didn't request a password reset, please ignore this email. Your account security is important to us.</p>
+
+            <p>Best,<br>
+                Book Buddy Team</p>
+          </main>
+    `,
+      };
+
+      await sendEmail(res, next, user.email, mailOptions, token, "resetEmail");
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
