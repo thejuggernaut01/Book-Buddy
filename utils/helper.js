@@ -30,7 +30,7 @@ const getMsgForPath = (errorArray, path) => {
 
 // sign up verification function
 // sends email after successful sign up
-const signUpVerification = async (res, next, email, mailOptions, token) => {
+const sendEmail = async (res, next, email, mailOptions, token, type) => {
   try {
     // query db whether user signed up successfully
     const db = getDB();
@@ -42,27 +42,62 @@ const signUpVerification = async (res, next, email, mailOptions, token) => {
       return res.redirect("/signup");
     }
 
-    // add verificationToken and verificationTokenExpiration to user object
-    user.verificationToken = token;
-    user.verificationTokenExpiration = Date.now() + 1800000;
+    if (type === "welcome") {
+      await db.collection("users").updateOne(
+        { email: user.email },
+        {
+          $set: {
+            verified: true,
+            verificationToken: undefined,
+            verificationTokenExpiration: undefined,
+          },
+        }
+      );
+    }
 
-    // updating the user model for verification
-    await db.collection("users").updateOne(
-      { email: email },
-      {
-        $set: {
-          verificationToken: user.verificationToken,
-          verificationTokenExpiration: user.verificationTokenExpiration,
-        },
-      }
-    );
+    // // check if type if for signUpEmail
+    if (type === "signUpEmail") {
+      // updating the user model for verification
+      await db.collection("users").updateOne(
+        { email: email },
+        {
+          $set: {
+            verificationToken: token,
+            verificationTokenExpiration: Date.now() + 1800000,
+          },
+        }
+      );
+    }
+
+    // check if type if for resetPW
+    if (type === "resetPW") {
+      // if user exists,
+      // update user resetToken and resetTokenExpiration field
+      await db.collection("users").updateOne(
+        { email: email },
+        {
+          $set: {
+            resetToken: token,
+            resetTokenExpiration: Date.now() + 1800000,
+          },
+        }
+      );
+    }
 
     // send verification email to user
     transporter.sendMail(mailOptions, function (err, data) {
       if (err) {
         console.log(err);
       }
-      res.redirect("/verify-email");
+      if (type === "signUpEmail") {
+        return res.redirect("/verify-email");
+      }
+
+      if (type === "resetPW") {
+        return res.redirect("/reset-password");
+      }
+
+      res.redirect("/");
     });
   } catch (err) {
     const error = new Error(err);
@@ -74,4 +109,4 @@ const signUpVerification = async (res, next, email, mailOptions, token) => {
 };
 
 exports.getMsgForPath = getMsgForPath;
-exports.signUpVerification = signUpVerification;
+exports.sendEmail = sendEmail;
