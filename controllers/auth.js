@@ -99,6 +99,20 @@ exports.postLogin = async (req, res, next) => {
         });
       }
 
+      if (!user.verified) {
+        return res.status(401).render("auth/login", {
+          path: "/login",
+          pageTitle: "Login into your account!",
+          errorMessage:
+            "Your account hasn't been verified, check your email and verify.",
+          oldInput: {
+            email: email,
+            password: password,
+          },
+          validationErrors: [],
+        });
+      }
+
       bcryptjs
         .compare(password, user.password)
         .then((doMatch) => {
