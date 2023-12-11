@@ -7,31 +7,28 @@ exports.getHome = (req, res, next) => {
   });
 };
 
-exports.getAllBooks = (req, res, next) => {
-  Book.fetchAll()
-    .then((result) => {
-      res.render("shop/books", {
-        path: "/books",
-        pageTitle: "Available Books",
-        books: result,
-      });
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+exports.getAllBooks = async (req, res, next) => {
+  // fetch all books
+  const books = await Book.fetchAll();
+
+  res.render("shop/books", {
+    path: "/books",
+    pageTitle: "Available Books",
+    books: books,
+  });
 };
 
-exports.getBook = (req, res, next) => {
+exports.getBook = async (req, res, next) => {
+  // fetch a single book using the book id
   let bookId = req.params.bookId;
-  Book.findById(bookId).then((book) => {
-    if (!book) {
-      res.redirect("/books");
-    }
+  const book = await Book.findById(bookId);
+  if (!book) {
+    res.redirect("/books");
+  }
 
-    res.render("shop/book-detail", {
-      path: "/book-detail",
-      pageTitle: "Book Detail",
-      book: book,
-    });
+  res.render("shop/book-detail", {
+    path: "/book-detail",
+    pageTitle: "Book Detail",
+    book: book,
   });
 };
