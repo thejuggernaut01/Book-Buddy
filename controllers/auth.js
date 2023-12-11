@@ -362,3 +362,82 @@ exports.postReset = (req, res, next) => {
     next(err);
   }
 };
+
+exports.getResetPassword = (req, res, next) => {
+  res.render("auth/login", {
+    path: "/reset-password",
+    pageTitle: "Reset your password!",
+  });
+};
+
+exports.getNewPassword = async (req, res, next) => {
+  const token = req.params.tokenId;
+  const db = getDB();
+
+  try {
+    const user = await db.collection("users").findOne({
+      resetToken: token,
+      resetTokenExpiration: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.redirect("/reset");
+    }
+
+    res.render("auth/new-password", {
+      path: "/new-password",
+      pageTitle: "New Password",
+      userId: user._id.toString(),
+      passwordToken: token,
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.postNewPassword = async (req, res, next) => {
+  const passwordToken = req.params.tokenId;
+  const newPassword = req.body.password;
+
+  const db = getDB();
+
+  try {
+    // query db to check for a user based on the specified field
+    const user = await db.collection("users").findOne({
+      resetToken: passwordToken,
+      resetTokenExpiration: { $gt: Date.now() },
+    });
+
+    // if such user does not exist
+    if (!user) {
+      return res.redirect("/reset");
+    }
+
+    // hash new password
+    const hashedPassword = await bcryptjs.hash(newPassword, 12);
+
+    // update the users password with new password
+    // cleaar resetToken and resetTokenVerification
+    await db.collection("users").updateOne(
+      { email: user.email },
+      {
+        $set: {
+          password: hashedPassword,
+          resetToken: undefined,
+          resetTokenExpiration: undefined,
+        },
+      }
+    );
+
+    res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
