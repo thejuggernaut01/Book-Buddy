@@ -41,66 +41,6 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
-exports.verifyEmail = (req, res, next) => {
-  res.render("auth/verify-email", {
-    path: "/verify-email",
-    pageTitle: "Verify your email!",
-  });
-};
-
-exports.verifiedUser = async (req, res, next) => {
-  const token = req.params.tokenId;
-
-  const db = getDB();
-  const user = await db.collection("users").findOne({
-    verificationToken: token,
-    verificationTokenExpiration: { $gt: Date.now() },
-  });
-
-  if (!user) {
-    const error = new Error("Email verification failed");
-    error.statusCode = 401;
-    throw error;
-  }
-
-  await db.collection("users").updateOne(
-    { email: user.email },
-    {
-      $set: {
-        verified: true,
-        verificationToken: undefined,
-        verificationTokenExpiration: undefined,
-      },
-    }
-  );
-
-  // mail options for nodemailer
-  const mailOptions = {
-    from: '"Book Buddy" bookbuddy@gmail.com',
-    to: user.email,
-    subject: "Welcome to Book Buddy",
-    html: `
-      <main>
-        <p>Dear ${user.firstName},</p>
-
-        <p>Welcome to Book Buddy! 📚✨ We're thrilled to have you join our community of book lovers.</p>
-
-        <p>Explore your personalized dashboard, share your favorite reads, and join discussions with fellow readers. Stay tuned for exciting updates!</p>
-
-        <p>Need assistance? We're here for you. Happy reading!</p>
-
-        <p>Best,<br>
-          Book Buddy Team</p>
-      </main>
-    `,
-  };
-
-  res.render("auth/verified", {
-    path: "/verified",
-    pageTitle: "You're account has been verified!",
-  });
-};
-
 exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -278,6 +218,64 @@ exports.postLogout = (req, res, next) => {
   });
 };
 
+exports.verifyEmail = (req, res, next) => {
+  res.render("auth/verify-email", {
+    path: "/verify-email",
+    pageTitle: "Verify your email!",
+  });
+};
+
+exports.verifiedUser = async (req, res, next) => {
+  const token = req.params.tokenId;
+
+  try {
+    const db = getDB();
+    const user = await db.collection("users").findOne({
+      verificationToken: token,
+      verificationTokenExpiration: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      const error = new Error("Email verification failed");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // mail options for nodemailer
+    const mailOptions = {
+      from: '"Book Buddy" bookbuddy@gmail.com',
+      to: user.email,
+      subject: "Welcome to Book Buddy",
+      html: `
+      <main>
+        <p>Dear ${user.firstName},</p>
+
+        <p>Welcome to Book Buddy! 📚✨ We're thrilled to have you join our community of book lovers.</p>
+
+        <p>Explore your personalized dashboard, share your favorite reads, and join discussions with fellow readers. Stay tuned for exciting updates!</p>
+
+        <p>Need assistance? We're here for you. Happy reading!</p>
+
+        <p>Best,<br>
+          Book Buddy Team</p>
+      </main>
+    `,
+    };
+
+    await sendEmail(res, next, user.email, mailOptions, token, "welcome");
+
+    res.render("auth/verified", {
+      path: "/verified",
+      pageTitle: "You're account has been verified!",
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
 exports.getReset = (req, res, next) => {
   res.render("auth/reset", {
     path: "/reset",
@@ -341,11 +339,11 @@ exports.postReset = (req, res, next) => {
         subject: "Password Reset - Book Buddy",
         html: `
           <main>
-            <p>Dear ${user.email},</p>
+            <p>Dear ${user.firstName},</p>
 
             <p>We received a request to reset your password on Book Buddy. If you initiated this request, please click the link below to reset your password:</p>
 
-            <p><a href="http://localhost:3030/reset/:${token}">Reset Password</a></p>
+            <p><a href="http://localhost:3030/reset/${token}">Reset Password</a></p>
 
             <p>Note: This link is valid for the next 30 minutes. If you didn't request a password reset, please ignore this email. Your account security is important to us.</p>
 
@@ -355,7 +353,7 @@ exports.postReset = (req, res, next) => {
     `,
       };
 
-      await sendEmail(res, next, user.email, mailOptions, token, "resetEmail");
+      await sendEmail(res, next, user.email, mailOptions, token, "resetPW");
     });
   } catch (err) {
     if (!err.statusCode) {
