@@ -14,7 +14,11 @@ router.get("/verify-email", authController.verifyEmail);
 
 router.get("/verify-email/:tokenId", authController.verifiedUser);
 
+router.get("/reset-password", authController.getResetPassword);
+
 router.get("/reset", authController.getReset);
+
+router.get("/reset/:tokenId", authController.getNewPassword);
 
 router.post("/login", authController.postLogin);
 
@@ -57,6 +61,8 @@ router.post(
   ],
   authController.postReset
 );
+
+router.post("/reset/:tokenId", authController.postNewPassword);
 
 router.post("/logout", authController.postLogout);
 
