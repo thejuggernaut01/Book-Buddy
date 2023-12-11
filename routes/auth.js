@@ -12,7 +12,7 @@ router.get("/signup", authController.getSignup);
 
 router.get("/verify-email", authController.verifyEmail);
 
-router.get("/verify-email/:id");
+router.get("/verify-email/:tokenId", authController.verifiedUser);
 
 router.post("/login", authController.postLogin);
 
