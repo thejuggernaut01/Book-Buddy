@@ -14,6 +14,8 @@ router.get("/verify-email", authController.verifyEmail);
 
 router.get("/verify-email/:tokenId", authController.verifiedUser);
 
+router.get("/reset", authController.getReset);
+
 router.post("/login", authController.postLogin);
 
 router.post(
@@ -43,6 +45,17 @@ router.post(
       .escape(),
   ],
   authController.postSignUp
+);
+
+router.post(
+  "/reset",
+  [
+    body("email")
+      .notEmpty()
+      .isEmail()
+      .withMessage("Please enter a valid email."),
+  ],
+  authController.postReset
 );
 
 router.post("/logout", authController.postLogout);
