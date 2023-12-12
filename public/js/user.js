@@ -64,3 +64,27 @@ const deleteFavorite = (btn) => {
       console.log(err);
     });
 };
+
+// reveal password
+function showPW(button) {
+  const password = document.querySelector("[name=password]");
+  const hidePW = document.getElementById("hidePW");
+
+  if (password.type === "password") {
+    password.type = "text";
+    button.style.display = "none";
+    hidePW.style.display = "block";
+  }
+}
+
+// hide password
+function hidePW(button) {
+  const password = document.querySelector("[name=password]");
+  const showPW = document.getElementById("showPW");
+
+  if (password.type === "text") {
+    button.style.display = "none";
+    showPW.style.display = "block";
+    password.type = "password";
+  }
+}
