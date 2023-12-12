@@ -509,6 +509,9 @@ video {
 .top-\[45\%\] {
   top: 45%;
 }
+.top-\[35\%\] {
+  top: 35%;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
