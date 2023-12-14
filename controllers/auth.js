@@ -364,7 +364,7 @@ exports.postReset = (req, res, next) => {
 };
 
 exports.getResetPassword = (req, res, next) => {
-  res.render("auth/login", {
+  res.render("auth/reset-password", {
     path: "/reset-password",
     pageTitle: "Reset your password!",
   });
