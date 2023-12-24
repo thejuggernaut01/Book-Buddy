@@ -1,6 +1,10 @@
 const cloudinary = require("cloudinary");
 const Book = require("../models/book");
 const User = require("../models/user");
+const mongodb = require("mongodb");
+const ObjectId = mongodb.ObjectId;
+
+const { getDB } = require("../utils/database");
 
 exports.getMyBooks = (req, res, next) => {
   const userId = req.session.user._id.toString();
@@ -121,30 +125,68 @@ exports.postEditBook = async (req, res, next) => {
   const isbn13 = req.body.isbn13;
   const userId = req.session.user._id.toString();
 
-  const bookAssets = [];
+  const db = getDB();
+
+  const existingBook = await db
+    .collection("books")
+    .findOne({ _id: new ObjectId(bookId) });
 
   try {
+    if (!existingBook) {
+      const error = new Error("Book not found!");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    let newBookFile;
+    let newBookImage;
+
+    // check if there's a change in book pdf file
     if (bookFile) {
-      bookAssets.push(...bookFile);
-      bookAssets.map(async (asset) => {
-        await cloudinary.v2.api.delete_resources(asset);
-      });
+      // Deleting existing pdf file from Cloudinary
+      await cloudinary.v2.uploader.destroy(existingBook.bookFile.public_id);
 
-      let multiplebookAssets = bookAssets.map((asset) =>
-        cloudinary.v2.uploader.upload(asset.path)
-      );
+      // Upload new pdf file to Cloudinary
+      const pdfResult = await cloudinary.uploader.upload(bookFile[0].path);
+      newBookFile = {
+        secureUrl: pdfResult.secure_url,
+        public_id: pdfResult.public_id,
+      };
     }
 
+    // check if there's a change in book image
     if (bookImage) {
-      bookAssets.push(...bookImage);
+      // Deleting existing image from Cloudinary
+      await cloudinary.v2.uploader.destroy(existingBook.bookImage.public_id);
+
+      // Upload new image to Cloudinary
+      const imageResult = await cloudinary.uploader.upload(bookImage[0].path);
+      newBookImage = {
+        secureUrl: imageResult.secure_url,
+        public_id: imageResult.public_id,
+      };
     }
 
-    let multiplebookAssets = bookAssets.map((asset) =>
-      cloudinary.v2.uploader.upload(asset.path)
-    );
+    // Update metadata in MongoDB
+    existingBook.title = title || existingBook.title;
+    existingBook.description = description || existingBook.description;
+    existingBook.authorName = authorName || existingBook.authorName;
+    existingBook.bookFile = newBookFile || existingBook.bookFile;
+    existingBook.bookImage = newBookImage || existingBook.bookImage;
+    existingBook.publicationDate =
+      publicationDate || existingBook.publicationDate;
+    existingBook.rating = rating || existingBook.rating;
+    existingBook.pages = pages || existingBook.pages;
+    existingBook.language = language || existingBook.language;
+    existingBook.readingAge = readingAge || existingBook.readingAge;
+    existingBook.isbn13 = isbn13 || existingBook.isbn13;
 
-    // await all the cloudinary upload functions in promise.all, exactly where the magic happens
-    let imageResponses = await Promise.all(multiplebookAssets);
+    // update the book in the books collection
+    await db
+      .collection("books")
+      .updateOne({ _id: new ObjectId(bookId) }, { $set: existingBook });
+
+    return res.redirect("/user/my-books");
   } catch (error) {
     console.log(error.message);
   }
