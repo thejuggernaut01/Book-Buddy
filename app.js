@@ -11,6 +11,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 
 const errorController = require("./controllers/error");
 
+const PORT = process.env.PORT || 3030;
 const MONGODB_URI = process.env.MONGODB_URI;
 const { getDB } = require("./utils/database");
 
@@ -22,6 +23,8 @@ const store = new MongoDBStore({
   collection: "sessions",
   expires: 1000 * 60 * 60 * 24 * 5,
 });
+
+const maxSize = 15 * 1000 * 1000; // File size should not exceed 15 mb
 
 const csrfProtection = csurf();
 
@@ -60,12 +63,15 @@ app.set("views", "views");
 const shopRoute = require("./routes/bookshop");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
-const User = require("./models/user");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).fields([
+  multer({
+    storage: fileStorage,
+    fileFilter: fileFilter,
+    limits: { fileSize: maxSize },
+  }).fields([
     { name: "file", maxCount: 1 },
     { name: "image", maxCount: 1 },
   ])
@@ -137,5 +143,5 @@ app.use((error, req, res, next) => {
 });
 
 mongoConnect(() => {
-  app.listen(3030);
+  app.listen(PORT);
 });
