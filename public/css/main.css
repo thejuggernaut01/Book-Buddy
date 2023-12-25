@@ -176,16 +176,16 @@ form {
 
 .pagination a {
   text-decoration: none;
-  color: #00695c;
+  color: #1c46cf;
   padding: 0.5rem;
-  border: 1px solid #00695c;
+  border: 1px solid #1c46cf;
   margin: 0 1rem;
 }
 
 .pagination a:hover,
 .pagination:active,
 .pagination a.active {
-  background-color: #00695c;
+  background-color: #1c46cf;
   color: white;
 }
 
