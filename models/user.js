@@ -31,7 +31,7 @@ class User {
 
   static fetchMyBooks(userId) {
     const db = getDB();
-    return db.collection("books").find({ userId: userId }).toArray();
+    return db.collection("books").find({ userId: userId });
   }
 
   static findOne(email) {

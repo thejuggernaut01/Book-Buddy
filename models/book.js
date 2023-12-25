@@ -46,7 +46,6 @@ class Book {
         .find()
         // .find({ readingAge: { $lte: age } })
         .project(projection)
-        .toArray()
     );
   }
 
