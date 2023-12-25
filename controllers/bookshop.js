@@ -1,5 +1,7 @@
 const Book = require("../models/book");
 
+const ITEMS_PER_PAGE = 4;
+
 exports.getHome = (req, res, next) => {
   res.render("shop/home", {
     path: "/",
@@ -8,14 +10,33 @@ exports.getHome = (req, res, next) => {
 };
 
 exports.getAllBooks = async (req, res, next) => {
-  // fetch all books
-  const books = await Book.fetchAll();
+  const page = +req.query.page || 1;
 
-  res.render("shop/books", {
-    path: "/books",
-    pageTitle: "Available Books",
-    books: books,
-  });
+  try {
+    // fetch all books
+    const totalBooks = await Book.fetchAll().count();
+    const books = await Book.fetchAll()
+      .skip((page - 1) * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE)
+      .toArray();
+
+    res.render("shop/books", {
+      path: "/books",
+      pageTitle: "Available Books",
+      books: books,
+      currentPage: page,
+      hasNextPage: ITEMS_PER_PAGE * page < totalBooks,
+      hasPreviousPage: page > 1,
+      nextPage: page + 1,
+      previousPage: page - 1,
+      lastPage: Math.ceil(totalBooks / ITEMS_PER_PAGE),
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.status = 500;
+    }
+    next(err);
+  }
 };
 
 exports.getBook = async (req, res, next) => {

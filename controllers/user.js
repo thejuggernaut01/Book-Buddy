@@ -6,16 +6,37 @@ const ObjectId = mongodb.ObjectId;
 
 const { getDB } = require("../utils/database");
 
-exports.getMyBooks = (req, res, next) => {
-  const userId = req.session.user._id.toString();
+const ITEMS_PER_PAGE = 4;
 
-  User.fetchMyBooks(userId).then((books) => {
+exports.getMyBooks = async (req, res, next) => {
+  const userId = req.session.user._id.toString();
+  const page = +req.query.page || 1;
+
+  // fetch books uploaded by currently logged in user
+  try {
+    const totalBooks = await User.fetchMyBooks(userId).count();
+    const books = await User.fetchMyBooks(userId)
+      .skip((page - 1) * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE)
+      .toArray();
+
     res.render("user/my-books", {
       path: "/user/my-books",
       pageTitle: "My books",
       books: books,
+      currentPage: page,
+      hasNextPage: ITEMS_PER_PAGE * page < totalBooks,
+      hasPreviousPage: page > 1,
+      nextPage: page + 1,
+      previousPage: page - 1,
+      lastPage: Math.ceil(totalBooks / ITEMS_PER_PAGE),
     });
-  });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.status = 500;
+    }
+    next(err);
+  }
 };
 
 exports.getAddBook = (req, res, next) => {
@@ -44,11 +65,13 @@ exports.postAddBook = async (req, res, next) => {
 
   const bookAssets = [...bookFile, ...bookImage];
 
-  if (bookAssets === 0) {
-    throw new Error("No assets attached!");
-  }
-
   try {
+    if (bookAssets === 0) {
+      const error = new Error("No assets attached!");
+      error.statusCode = 404;
+      throw error;
+    }
+
     // looped through book assets (image, file)
     // each assest was uploaded using cloudinary v2 uploader
     let multiplebookAssets = bookAssets.map((asset) =>
@@ -90,9 +113,9 @@ exports.postAddBook = async (req, res, next) => {
   }
 };
 
-exports.getEditBook = (req, res, next) => {
+exports.getEditBook = async (req, res, next) => {
   const bookId = req.params.bookId;
-  Book.findById(bookId)
+  await Book.findById(bookId)
     .then((book) => {
       if (!book) {
         res.redirect("/my-books");
