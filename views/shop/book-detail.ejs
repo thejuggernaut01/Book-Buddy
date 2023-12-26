@@ -47,9 +47,11 @@
                     </p>
                 </div>
 
-                <a href="<%= book.bookFile.secureUrl %>" target="_blank">
-                    <button type="button" class="border border-[#0052FF] rounded-full w-full h-14 bg-[#0052FF] text-white text-lg font-semibold hover:shadow-2xl hover:-translate-y-[0.1rem]">Download PDF</button>
-                </a>
+                <% if (isAuthenticated) { %>
+                    <a href="<%= book.bookFile.secureUrl %>" target="_blank">
+                        <button type="button" class="border border-[#0052FF] rounded-full w-full h-14 bg-[#0052FF] text-white text-lg font-semibold hover:shadow-2xl hover:-translate-y-[0.1rem]">Download PDF</button>
+                    </a>
+                <% } %>
             </div>
         </article>
     </main>
