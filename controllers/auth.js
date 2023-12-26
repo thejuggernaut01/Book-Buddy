@@ -341,7 +341,7 @@ exports.postReset = (req, res, next) => {
 
             <p>We received a request to reset your password on Book Buddy. If you initiated this request, please click the link below to reset your password:</p>
 
-            <p><a href="http://localhost:${PORT}/reset/${token}">Reset Password</a></p>
+            <p><a href="https://book-buddy.onrender.com/reset/${token}">Reset Password</a></p>
 
             <p>Note: This link is valid for the next 30 minutes. If you didn't request a password reset, please ignore this email. Your account security is important to us.</p>
 
