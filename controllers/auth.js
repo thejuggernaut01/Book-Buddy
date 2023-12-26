@@ -186,7 +186,7 @@ exports.postSignUp = async (req, res, next) => {
             <p>Dear ${firstName},</p>
             <p>Welcome to Book Buddy! 📚✨ To ensure the security of your account, we kindly ask you to verify your email address.</p>
 
-            <p>Please click on the following link to complete the verification process: <a href="http://localhost:${PORT}/verify-email/${token}">Verification Link</a></p>
+            <p>Please click on the following link to complete the verification process: <a href="https://book-buddy.onrender.com/verify-email/${token}">Verification Link</a></p>
 
             <p>Note: This link is valid for the next 30 minutes. If you don't verify your account within this timeframe, you may need to request a new verification email.</p>
 
