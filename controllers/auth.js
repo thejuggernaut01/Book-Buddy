@@ -7,6 +7,8 @@ const { getDB } = require("../utils/database");
 const { validationResult } = require("express-validator");
 const { getMsgForPath, sendEmail } = require("../utils/helper");
 
+const PORT = process.env.PORT;
+
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
     path: "/login",
@@ -36,7 +38,6 @@ exports.getSignup = (req, res, next) => {
       password: "",
       firstName: "",
       lastName: "",
-      age: "",
     },
   });
 };
@@ -117,7 +118,6 @@ exports.postSignUp = async (req, res, next) => {
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
-  const age = req.body.age;
   const favorite = { books: [] };
   const verified = false;
 
@@ -139,7 +139,6 @@ exports.postSignUp = async (req, res, next) => {
         password,
         firstName,
         lastName,
-        age,
       },
     });
   }
@@ -172,7 +171,6 @@ exports.postSignUp = async (req, res, next) => {
         lastName,
         email,
         hashedPassword,
-        +age,
         favorite,
         verified
       );
@@ -188,7 +186,7 @@ exports.postSignUp = async (req, res, next) => {
             <p>Dear ${firstName},</p>
             <p>Welcome to Book Buddy! 📚✨ To ensure the security of your account, we kindly ask you to verify your email address.</p>
 
-            <p>Please click on the following link to complete the verification process: <a href="http://localhost:3030/verify-email/${token}">Verification Link</a></p>
+            <p>Please click on the following link to complete the verification process: <a href="http://localhost:${PORT}/verify-email/${token}">Verification Link</a></p>
 
             <p>Note: This link is valid for the next 30 minutes. If you don't verify your account within this timeframe, you may need to request a new verification email.</p>
 
@@ -343,7 +341,7 @@ exports.postReset = (req, res, next) => {
 
             <p>We received a request to reset your password on Book Buddy. If you initiated this request, please click the link below to reset your password:</p>
 
-            <p><a href="http://localhost:3030/reset/${token}">Reset Password</a></p>
+            <p><a href="http://localhost:${PORT}/reset/${token}">Reset Password</a></p>
 
             <p>Note: This link is valid for the next 30 minutes. If you didn't request a password reset, please ignore this email. Your account security is important to us.</p>
 

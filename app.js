@@ -18,6 +18,7 @@ const { getDB } = require("./utils/database");
 const app = express();
 require("dotenv").config();
 
+// Setting mongodb store
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
@@ -28,6 +29,7 @@ const maxSize = 15 * 1000 * 1000; // File size should not exceed 15 mb
 
 const csrfProtection = csurf();
 
+// Cloudinary configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   secure: true,
@@ -57,9 +59,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// ejs configuration
 app.set("view engine", "ejs");
 app.set("views", "views");
 
+// routes
 const shopRoute = require("./routes/bookshop");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");

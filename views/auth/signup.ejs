@@ -12,7 +12,7 @@
       <div class="flex flex-col mt-5 md:flex-row gap-5">
         <div class="space-y-5 md:flex-1">        
 
-          <form action="/signup" method="POST" class="space-y-5">
+          <form action="/signup" method="POST" class="space-y-5" id="signupForm">
 
             <div class="flex flex-col space-y-1">
               <label for="firstName" class="text-sm font-semibold">Legal first name*</label>
@@ -57,11 +57,6 @@
 
             </div>
 
-            <div class="flex flex-col space-y-1">
-              <label for="age" class="text-sm font-semibold">Age*</label>
-              <input type="text" name="age" id="age" class="border border-gray-400 h-14 rounded-lg outline-2 outline-transparent pl-4 text-lg placeholder:text-base text-gray-500 focus:outline-2 focus:outline-[#0052FF]" placeholder="Enter your age" required style="transition: outline 0.7s ease-in-out" value="<%= oldInput.age %>">
-            </div>
-
             <div class="flex items-center gap-5">
               <input type="checkbox" name="certified" id="certified" class="cursor-pointer w-4 h-4" required>
               
@@ -70,7 +65,7 @@
 
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
-            <button type="submit" class="border border-[#0052FF] rounded-full w-full h-14 bg-[#0052FF] text-white text-lg font-semibold hover:shadow-2xl hover:-translate-y-[0.1rem]">Create account</button>
+            <button type="submit" class="border border-[#0052FF] rounded-full w-full h-14 bg-[#0052FF] text-white text-lg font-semibold hover:shadow-2xl hover:-translate-y-[0.1rem]" id="signupButton" onclick="handleSignup()">Create account</button>
           </form>
         </div>
         
